@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class Deck {
-    private List<PlayingCard> cards;
+public abstract class Deck {
+    protected List<PlayingCard> cards;
 
     public Deck() {
         cards = new ArrayList<PlayingCard>();

@@ -2,8 +2,10 @@ package com.godzy.cardgame.controller;
 
 import com.godzy.cardgame.games.GameEvaluator;
 import com.godzy.cardgame.model.Deck;
+import com.godzy.cardgame.model.IPlayer;
 import com.godzy.cardgame.model.Player;
 import com.godzy.cardgame.model.PlayingCard;
+import com.godzy.cardgame.model.WinningPlayer;
 import com.godzy.cardgame.view.GameViewable;
 
 import java.util.ArrayList;
@@ -14,8 +16,8 @@ public class GameController {
         AddingPlayers, CardsDealt, WinnerRevealed;
     }
     Deck deck;
-    List<Player> players;
-    Player winner;
+    List<IPlayer> players;
+    IPlayer winner;
     GameViewable view;
 
     GameState gameState;
@@ -25,7 +27,7 @@ public class GameController {
         super();
         this.deck = deck;
         this.view = view;
-        this.players = new ArrayList<Player>();
+        this.players = new ArrayList<IPlayer>();
         this.gameState = GameState.AddingPlayers;
         view.setController(this);
         this.evaluator = evaluator;
@@ -59,7 +61,7 @@ public class GameController {
         if (gameState != GameState.CardsDealt) {
             deck.shuffle();
             int playerIndex = 1;
-            for (Player player : players) {
+            for (IPlayer player : players) {
                 player.addCardToHand(deck.removeTopCard());
                 view.showFaceDownCardForPLayer(playerIndex++, player.getName());
             }
@@ -70,7 +72,7 @@ public class GameController {
 
     public void flipCards() {
         int playerIndex = 1;
-        for (Player player : players) {
+        for (IPlayer player : players) {
             PlayingCard pc = player.getCard(0);
             pc.flip();
             view.showCardForPlayer(playerIndex++, player.getName(),
@@ -85,11 +87,11 @@ public class GameController {
     }
 
     void evaluateWinner() {
-        winner = evaluator.evaluateWinner(players);
+        winner = new WinningPlayer(evaluator.evaluateWinner(players));
     }
 
     void rebuildDeck() {
-        for (Player player : players) {
+        for (IPlayer player : players) {
             deck.returnCardToDeck(player.removeCard());
         }
     }

@@ -1,6 +1,10 @@
 package com.godzy.cardgame.model;
 
-public class PlayingCard {
+interface PlayableCard {
+    void flip();
+}
+
+public class PlayingCard implements PlayableCard{
     private final Rank rank;
     private final Suit suit;
     private boolean faceUp = false;
@@ -23,8 +27,25 @@ public class PlayingCard {
         return faceUp;
     }
 
-    public boolean flip() {
+    public void flip() {
         faceUp = !faceUp;
-        return faceUp;
+        //return faceUp;
     }
+}
+
+class CoolCard {
+    void turnOver() {
+        
+    }
+}
+
+class PlayingCardAdapter implements PlayableCard {
+
+    CoolCard thisCard;
+
+    @Override
+    public void flip() {
+        thisCard.turnOver();
+    }
+    
 }
